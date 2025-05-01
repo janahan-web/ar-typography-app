@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AR Typography Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Include AR.js and A-Frame -->
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@2.3.1/aframe/build/aframe-ar.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #details { 
+      position: absolute; 
+      top: 20px; 
+      left: 20px; 
+      background: rgba(0, 0, 0, 0.7); 
+      color: white; 
+      padding: 10px; 
+      border-radius: 5px; 
+      font-size: 16px; 
+      display: none; 
+      max-width: 200px;
+    }
+    #instructions { 
+      position: absolute; 
+      bottom: 20px; 
+      left: 20px; 
+      color: white; 
+      background: rgba(0, 0, 0, 0.5); 
+      padding: 5px; 
+      border-radius: 3px; 
+    }
+  </style>
+</head>
+<body>
+  <!-- Instructions -->
+  <div id="instructions">Point camera at the poster to view 3D typography</div>
+  <!-- Details UI -->
+  <div id="details"></div>
+
+  <!-- A-Frame Scene -->
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <!-- Image Target (replace 'poster.jpg' with your poster URL after hosting) -->
+    <a-image 
+      src="poster.jpg" 
+      position="0 0 0" 
+      scale="0.1 0.1 0.1" 
+      look-at="[camera]">
+      <!-- 3D Text -->
+      <a-text 
+        value="Hello" 
+        color="white" 
+        position="0 0.2 0" 
+        scale="0.5 0.5 0.5" 
+        align="center" 
+        font="mozillavr"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+      </a-text>
+    </a-image>
+    <!-- Camera -->
+    <a-camera></a-camera>
+  </a-scene>
+
+  <script>
+    // Show details when image is detected
+    const detailsDiv = document.getElementById('details');
+    const instructionsDiv = document.getElementById('instructions');
+    const imageTarget = document.querySelector('a-image');
+    imageTarget.addEventListener('targetFound', () => {
+      detailsDiv.style.display = 'block';
+      detailsDiv.innerHTML = 'Font: Helvetica<br>Designer: Max Miedinger<br>Style: Sans-serif';
+      instructionsDiv.style.display = 'none';
+    });
+    imageTarget.addEventListener('targetLost', () => {
+      detailsDiv.style.display = 'none';
+      instructionsDiv.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
